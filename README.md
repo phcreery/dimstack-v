@@ -1,10 +1,10 @@
 # dimstack (in V)
 
-This is a port of dimstack. See https://github.com/phcreery/dimstack for original and latest.
+This is an experimental port of dimstack. See https://github.com/phcreery/dimstack for original and latest.
 
 `v watch run .\examples\`
 
-`v test . `
+`v test .`
 
 `v -shared -b js_browser .\dimstack\ -o dimstack.js`
 

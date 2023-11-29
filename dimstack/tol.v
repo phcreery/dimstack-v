@@ -1,7 +1,5 @@
 module dimstack
 
-import math
-
 pub type TTolerance = TolBilateral
 
 // interface ITolerance {
@@ -50,20 +48,6 @@ pub fn TolBilateral.unequal(upper f64, lower f64) TolBilateral {
 	}
 }
 
-pub fn (t TolBilateral) tostring() string {
-	if t.upper == t.lower {
-		return '[TolBilateral Tolerance] ± ${t.upper}'
-	}
-	return '[TolBilateral Tolerance] ${direction_symbol(t.upper)} ${t.upper} / ${direction_symbol(t.lower)} ${t.lower}'
-}
-
 pub fn (t TolBilateral) t() f64 {
 	return f64(t.upper - t.lower)
 }
-
-// // TODO: convert_to_symmetric
-// fn (t UnequalTolBilateral) convert_to_symmetric() SymmetricTolBilateral {
-// 	// Convert the tolerance to a TolBilateral tolerance.
-// 	median := (t.upper() + t.lower()) / 2
-// 	tol := t.t()
-// }

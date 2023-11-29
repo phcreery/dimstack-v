@@ -85,7 +85,7 @@ pub mut:
 
 pub fn (n Normal) tostring() string {
 	// return 'Normal Distribution ± ${d.process_sigma}σ & k = ${d.k}'
-	return '[Normal Distribution] μ = ${n.mean}, σ = ${n.stdev}'
+	return '[Normal Dist.] μ = ${n.mean}, σ = ${n.stdev}'
 }
 
 pub fn (n Normal) mean() f64 {

@@ -12,10 +12,6 @@ pub mut:
 	desc string = 'Dimension'
 }
 
-pub fn (d DimBasic) tostring() string {
-	return '[Basic Dimension] ${d.name}: ${d.nom_direction_sign()}${d.nom} ${d.tol.tostring()} [${d.rel_lower()}, ${d.rel_upper()}]'
-}
-
 pub fn (d DimBasic) dir() f64 {
 	return direction_int(d.nom) * direction_int(d.a)
 }
@@ -107,9 +103,6 @@ pub mut:
 	// data=None,
 }
 
-pub fn (d DimStatistical) tostring() string {
-	return '[Statistical Dimension] ${d.name}: ${d.nom_direction_sign()}${d.nom} ${d.tol.tostring()} [${d.rel_lower()}, ${d.rel_upper()}] @ ${d.dist.tostring()} (C_p = ${d.c_p()}, C_pk = ${d.c_pk()}, k = ${d.k()}) (stdev_eff = ${d.stdev_eff()}, mean_eff = ${d.mean_eff()})'
-}
 
 // Convert a basic dimension to a statistical dimension.
 pub fn DimStatistical.from_basic_dim(basic DimBasic) DimStatistical {
@@ -118,9 +111,12 @@ pub fn DimStatistical.from_basic_dim(basic DimBasic) DimStatistical {
 		tol: basic.tol
 		name: basic.name
 		desc: basic.desc
-		dist: Normal{}
+		dist: Uniform{
+			upper: basic.rel_upper()
+			lower: basic.rel_lower()
+		}
 	}
-	dim.assume_normal_dist()
+	// dim.assume_normal_dist()
 	return dim
 }
 
@@ -229,9 +225,6 @@ pub mut:
 	desc string = 'Stack'
 }
 
-pub fn (s DimStack) tostring() string {
-	return '[Stack] ${s.name}: ${s.dims.len} dimensions'
-}
 
 pub fn (mut s DimStack) append(d TDimension) {
 	s.dims << d
@@ -431,10 +424,6 @@ pub mut:
 	ul   f64
 }
 
-pub fn (s Spec) tostring() string {
-	dim := s.dim as DimStatistical
-	return '[Spec] ${s.name}: ${dim.tostring()} [${s.ll} ${s.ul}]'
-}
 
 pub fn (s Spec) median() f64 {
 	return (s.ll + s.ul) / 2
