@@ -5,14 +5,12 @@ import math
 // [export: 'DimBasic']
 pub struct DimBasic {
 pub mut:
-	nom  f64        [required]
-	tol  TTolerance [required]
+	nom  f64        @[required]
+	tol  TTolerance @[required]
 	a    f64    = 1 // global sensitivity
 	name string = 'Dimension'
 	desc string = 'Dimension'
 }
-
-
 
 pub fn (d DimBasic) tostring() string {
 	return '[Basic Dimension] ${d.name}: ${d.nom_direction_sign()}${d.nom} ${d.tol.tostring()} [${d.rel_lower()}, ${d.rel_upper()}]'
@@ -104,7 +102,7 @@ pub struct DimStatistical {
 pub mut:
 	process_sigma f64 = 6
 	// k             f64
-	dist IDistribution [required]
+	dist IDistribution @[required]
 	// distribution string = dist.DIST_NORMAL,
 	// data=None,
 }

@@ -53,8 +53,8 @@ pub interface IDistribution {
 // Uniform Distrubution
 pub struct Uniform {
 pub mut:
-	upper f64 [required]
-	lower f64 [required]
+	upper f64 @[required]
+	lower f64 @[required]
 }
 
 pub fn (u Uniform) tostring() string {

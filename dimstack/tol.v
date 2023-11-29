@@ -13,8 +13,8 @@ pub type TTolerance = TolBilateral
 
 pub struct TolBilateral {
 pub mut:
-	upper f64 [required]
-	lower f64 [required]
+	upper f64 @[required]
+	lower f64 @[required]
 }
 
 pub fn TolBilateral.symmetric(tol f64) TolBilateral {

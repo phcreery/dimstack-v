@@ -20,9 +20,9 @@ fn direction_int(x f64) f64 {
 
 fn direction_symbol(x f64) string {
 	if x >= 0 {
-		return positve
+		return dimstack.positve
 	}
-	return negative
+	return dimstack.negative
 }
 
 fn nround(d f64) f64 {
