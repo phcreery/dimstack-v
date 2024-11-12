@@ -2,10 +2,8 @@ module dimstack
 
 import math
 
-const (
-	positve  = '+'
-	negative = '-'
-)
+const positve = '+'
+const negative = '-'
 
 // TODO: use math.sign
 // Return the sign of x, i.e. -1, 0 or 1.
@@ -20,9 +18,9 @@ fn direction_int(x f64) f64 {
 
 fn direction_symbol(x f64) string {
 	if x >= 0 {
-		return dimstack.positve
+		return positve
 	}
-	return dimstack.negative
+	return negative
 }
 
 fn nround(d f64) f64 {

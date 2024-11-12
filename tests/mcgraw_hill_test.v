@@ -78,26 +78,29 @@ fn test_mcgrawhill() {
 	println(stack)
 
 	test_wc := fn [stack] () {
-		assert dimstack.nround(stack.compute_wc().nom) == 0.0615
-		assert dimstack.nround(stack.compute_wc().tol.t() / 2) == 0.0955 // note, python impl has it at 0.0915
-		assert dimstack.nround(stack.compute_wc().z_min()) == -0.034 // python impl has it at -0.03
-		assert dimstack.nround(stack.compute_wc().z_max()) == 0.157 // python impl has it at 0.153
+		wc := dimstack.compute_wc(stack)
+		assert dimstack.nround(wc.nom) == 0.0615
+		assert dimstack.nround(wc.tol.t() / 2) == 0.0955 // note, python impl has it at 0.0915
+		assert dimstack.nround(wc.z_min()) == -0.034 // python impl has it at -0.03
+		assert dimstack.nround(wc.z_max()) == 0.157 // python impl has it at 0.153
 	}
 	test_wc()
 
 	test_rss := fn [stack] () {
-		assert dimstack.nround(stack.compute_rss().nom) == 0.0615
-		assert math.round_sig(stack.compute_rss().tol.t() / 2, 3) == 0.038 // python impl has it at 0.0381
-		assert math.round_sig(stack.compute_rss().z_min(), 4) == 0.0234 // python impl at 0.02395
-		assert math.round_sig(stack.compute_rss().z_max(), 4) == 0.0996 // python impl at 0.09905
+		rss := dimstack.compute_rss(stack)
+		assert dimstack.nround(rss.nom) == 0.0615
+		assert math.round_sig(rss.tol.t() / 2, 3) == 0.038 // python impl has it at 0.0381
+		assert math.round_sig(rss.z_min(), 4) == 0.0234 // python impl at 0.02395
+		assert math.round_sig(rss.z_max(), 4) == 0.0996 // python impl at 0.09905
 	}
 	test_rss()
 
 	test_mrss := fn [stack] () {
-		assert dimstack.nround(stack.compute_mrss().nom) == 0.0615
-		assert math.round_sig(stack.compute_mrss().tol.t() / 2, 4) == 0.0505 // python impl at 0.04919
-		assert math.round_sig(stack.compute_mrss().z_min(), 4) == 0.0110 // python impl at 0.012
-		assert math.round_sig(stack.compute_mrss().z_max(), 4) == 0.1120 // python impl at 0.111
+		mrss := dimstack.compute_mrss(stack)
+		assert dimstack.nround(mrss.nom) == 0.0615
+		assert math.round_sig(mrss.tol.t() / 2, 4) == 0.0505 // python impl at 0.04919
+		assert math.round_sig(mrss.z_min(), 4) == 0.0110 // python impl at 0.012
+		assert math.round_sig(mrss.z_max(), 4) == 0.1120 // python impl at 0.111
 	}
 	test_mrss()
 }

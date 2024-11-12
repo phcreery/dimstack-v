@@ -6,10 +6,10 @@ import serkonda7.termtable
 
 fn gettable(data [][]string) string {
 	table := termtable.Table{
-		data: data
-		style: .pretty
-		orientation: .column
-		padding: 1
+		data:         data
+		style:        .pretty
+		orientation:  .column
+		padding:      1
 		header_style: .plain
 	}
 	return table.str()
@@ -32,7 +32,8 @@ pub fn (d DimBasic) totable() string {
 		['Desc.', '${d.desc}'],
 		['Nom.', '${d.nom_direction_sign()}${math.abs(d.nom)}'],
 		['Tol.', '${d.tol.tostring()}'],
-		['Relative Bounds', '[${d.rel_lower()} ${d.rel_upper()}]'],
+		// ['Rel. Bounds', '[${d.rel_lower()} ${d.rel_upper()}]'],
+		['Abs. Bounds', '[${d.abs_lower()} ${d.abs_upper()}]'],
 		// ['', ''],
 	]
 	return gettable(data)
@@ -49,7 +50,8 @@ pub fn (d DimStatistical) totable() string {
 		['Nom.', '${d.nom_direction_sign()}${math.abs(d.nom)}'],
 		['Tol.', '${d.tol.tostring()}'],
 		['Sens. (a)', '${d.a}'],
-		['Relative Bounds', '[${d.rel_lower()} ${d.rel_upper()}]'],
+		// ['Rel. Bounds', '[${d.rel_lower()} ${d.rel_upper()}]'],
+		['Abs. Bounds', '[${d.abs_lower()} ${d.abs_upper()}]'],
 		['Distribution', '${d.dist.tostring()}'],
 		['Process Sigma', '± ${d.process_sigma}σ'],
 		['Skew (k)', '${math.round_sig(d.k(), 4)}'],
@@ -73,7 +75,8 @@ pub fn (s DimStack) totable() string {
 			'Nominal',
 			'Tol.',
 			'Sens. (a)',
-			'Relative Bounds',
+			// 'Rel. Bounds',
+			'Abs. Bounds',
 			'Distribution',
 			'Process Sigma',
 			'Skew (k)',
@@ -95,7 +98,8 @@ pub fn (s DimStack) totable() string {
 					'${d.nom_direction_sign()}${math.abs(d.nom)}',
 					'${d.tol.tostring()}',
 					'${d.a}',
-					'[${d.rel_lower()} ${d.rel_upper()}]',
+					// '[${d.rel_lower()} ${d.rel_upper()}]',
+					'${d.abs_lower()} ${d.abs_upper()}',
 					'',
 					'',
 					'',
@@ -114,7 +118,8 @@ pub fn (s DimStack) totable() string {
 					'${d.nom_direction_sign()}${math.abs(d.nom)}',
 					'${d.tol.tostring()}',
 					'${d.a}',
-					'[${d.rel_lower()} ${d.rel_upper()}]',
+					// '[${d.rel_lower()} ${d.rel_upper()}]',
+					'${d.abs_lower()} ${d.abs_upper()}',
 					'${d.dist.tostring()}',
 					'± ${d.process_sigma}σ',
 					'${math.round_sig(d.k(), 4)}',
@@ -130,15 +135,14 @@ pub fn (s DimStack) totable() string {
 		}
 	}
 	table := termtable.Table{
-		data: data
-		style: .pretty
-		orientation: .row
-		padding: 1
+		data:         data
+		style:        .pretty
+		orientation:  .row
+		padding:      1
 		header_style: .plain
 	}
 	return table.str()
 }
-
 
 pub fn (s Spec) tostring() string {
 	dim := s.dim as DimStatistical

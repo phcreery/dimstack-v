@@ -7,66 +7,66 @@ import math
 
 fn test_mitcalc() {
 	mut m1 := dimstack.DimStatistical{
-		nom: 208
-		tol: dimstack.TolBilateral.symmetric(0.036)
-		dist: dimstack.Normal{}
+		nom:           208
+		tol:           dimstack.TolBilateral.symmetric(0.036)
+		dist:          dimstack.Normal{}
 		process_sigma: 6
-		name: 'a'
-		desc: 'Shaft'
+		name:          'a'
+		desc:          'Shaft'
 	}
 	m1.assume_normal_dist_skewed(0.25)
 	mut m2 := dimstack.DimStatistical{
-		nom: -1.75
-		tol: dimstack.TolBilateral.unequal(0, -0.06)
-		dist: dimstack.Normal{}
+		nom:           -1.75
+		tol:           dimstack.TolBilateral.unequal(0, -0.06)
+		dist:          dimstack.Normal{}
 		process_sigma: 3
-		name: 'b'
-		desc: 'Retainer ring'
+		name:          'b'
+		desc:          'Retainer ring'
 	}
 	m2.assume_normal_dist()
 	mut m3 := dimstack.DimStatistical{
-		nom: -23
-		tol: dimstack.TolBilateral.unequal(0, -0.12)
-		dist: dimstack.Normal{}
+		nom:           -23
+		tol:           dimstack.TolBilateral.unequal(0, -0.12)
+		dist:          dimstack.Normal{}
 		process_sigma: 3
-		name: 'c'
-		desc: 'Bearing'
+		name:          'c'
+		desc:          'Bearing'
 	}
 	m3.assume_normal_dist()
 	mut m4 := dimstack.DimStatistical{
-		nom: 20
-		tol: dimstack.TolBilateral.symmetric(0.026)
-		dist: dimstack.Normal{}
+		nom:           20
+		tol:           dimstack.TolBilateral.symmetric(0.026)
+		dist:          dimstack.Normal{}
 		process_sigma: 3
-		name: 'd'
-		desc: 'Bearing Sleeve'
+		name:          'd'
+		desc:          'Bearing Sleeve'
 	}
 	m4.assume_normal_dist()
 	mut m5 := dimstack.DimStatistical{
-		nom: -200
-		tol: dimstack.TolBilateral.symmetric(0.145)
-		dist: dimstack.Normal{}
+		nom:           -200
+		tol:           dimstack.TolBilateral.symmetric(0.145)
+		dist:          dimstack.Normal{}
 		process_sigma: 3
-		name: 'e'
-		desc: 'Case'
+		name:          'e'
+		desc:          'Case'
 	}
 	m5.assume_normal_dist()
 	mut m6 := dimstack.DimStatistical{
-		nom: 20
-		tol: dimstack.TolBilateral.symmetric(0.026)
-		dist: dimstack.Normal{}
+		nom:           20
+		tol:           dimstack.TolBilateral.symmetric(0.026)
+		dist:          dimstack.Normal{}
 		process_sigma: 3
-		name: 'f'
-		desc: 'Bearing Sleeve'
+		name:          'f'
+		desc:          'Bearing Sleeve'
 	}
 	m6.assume_normal_dist()
 	mut m7 := dimstack.DimStatistical{
-		nom: -23
-		tol: dimstack.TolBilateral.unequal(0, -0.12)
-		dist: dimstack.Normal{}
+		nom:           -23
+		tol:           dimstack.TolBilateral.unequal(0, -0.12)
+		dist:          dimstack.Normal{}
 		process_sigma: 3
-		name: 'g'
-		desc: 'Bearing'
+		name:          'g'
+		desc:          'Bearing'
 	}
 	m7.assume_normal_dist()
 
@@ -88,36 +88,39 @@ fn test_mitcalc() {
 	test_input()
 
 	test_closed := fn [stack] () {
-		assert stack.compute_closed().nom == 0.25
-		assert dimstack.nround(stack.compute_closed().tol.upper) == 0.533
-		assert dimstack.nround(stack.compute_closed().tol.lower) == -0.233
+		closed := dimstack.compute_closed(stack)
+		assert closed.nom == 0.25
+		assert dimstack.nround(closed.tol.upper) == 0.533
+		assert dimstack.nround(closed.tol.lower) == -0.233
 	}
 	test_closed()
 
 	test_wc := fn [stack] () {
-		assert dimstack.nround(stack.compute_wc().nom) == 0.4
-		assert dimstack.nround(stack.compute_wc().tol.t() / 2) == 0.383
-		assert dimstack.nround(stack.compute_wc().z_min()) == 0.017
-		assert dimstack.nround(stack.compute_wc().z_max()) == 0.783
+		wc := dimstack.compute_wc(stack)
+		assert dimstack.nround(wc.nom) == 0.4
+		assert dimstack.nround(wc.tol.t() / 2) == 0.383
+		assert dimstack.nround(wc.z_min()) == 0.017
+		assert dimstack.nround(wc.z_max()) == 0.783
 	}
 	test_wc()
 
 	test_rss := fn [stack] () {
+		rss := dimstack.compute_rss(stack)
 		// # self.assertEqual(dimstack.utils.nround(stack.RSS.mean), 0.4)
-		assert dimstack.nround(stack.compute_rss().nom) == 0.4
-		assert dimstack.nround(stack.compute_rss().tol.t() / 2) == 0.17825
+		assert dimstack.nround(rss.nom) == 0.4
+		assert dimstack.nround(rss.tol.t() / 2) == 0.17825
 		// # self.assertEqual(dimstack.utils.nround(stack.RSS.stdev, 6), 0.059417)
 	}
 	test_rss()
 
 	test_rss_assembly := fn [stack] () {
-		eval := stack.compute_rss()
+		eval := dimstack.compute_rss(stack)
 		spec := dimstack.Spec{
 			name: 'spec'
 			desc: ''
-			dim: eval
-			ll: 0.05
-			ul: 0.8
+			dim:  eval
+			ll:   0.05
+			ul:   0.8
 		}
 
 		assert math.round_sig(spec.r(), 1) == 0.0
@@ -140,23 +143,24 @@ fn test_mitcalc() {
 		assert dimstack.nround(dim.mean_eff()) == 208.0
 		assert dimstack.nround(dim.stdev_eff()) == 0.008
 
+		six_sigma := dimstack.compute_six_sigma(stack, 4.5)
 		// assert dimstack.nround(stack.compute_six_sigma(4.5).mean_eff()) == 0.4
-		assert dimstack.nround(stack.compute_six_sigma(4.5).nom) == 0.4
-		assert dimstack.nround(stack.compute_six_sigma(4.5).tol.t() / 2) == 0.26433
-		assert dimstack.nround(stack.compute_six_sigma(4.5).stdev_eff()) == 0.05874
-		assert dimstack.nround(stack.compute_six_sigma(4.5).z_min()) == 0.13567
-		assert dimstack.nround(stack.compute_six_sigma(4.5).z_max()) == 0.66433
+		assert dimstack.nround(six_sigma.nom) == 0.4
+		assert dimstack.nround(six_sigma.tol.t() / 2) == 0.26433
+		assert dimstack.nround(six_sigma.stdev_eff()) == 0.05874
+		assert dimstack.nround(six_sigma.z_min()) == 0.13567
+		assert dimstack.nround(six_sigma.z_max()) == 0.66433
 	}
 	test_sixsigma()
 
 	test_sixsigma_assembly := fn [stack] () {
-		eval := stack.compute_six_sigma(4.5)
+		eval := dimstack.compute_six_sigma(stack, 4.5)
 		spec := dimstack.Spec{
 			name: 'spec'
 			desc: ''
-			dim: eval
-			ll: 0.05
-			ul: 0.8
+			dim:  eval
+			ll:   0.05
+			ul:   0.8
 		}
 
 		// 	# self.assertEqual(dimstack.utils.nround(spec.C_p), 2.12804) # temporarily removed 20230623
